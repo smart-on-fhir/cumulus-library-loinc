@@ -186,7 +186,7 @@
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright [yyyy] [name of copyright owner]
+   Copyright 2025 SMART Health IT
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -199,3 +199,22 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+
+-----------------------------------
+
+LOINC License
+
+This material contains content from LOINC (http://loinc.org). LOINC is copyright © Regenstrief
+Institute, Inc. and the Logical Observation Identifiers Names and Codes (LOINC) Committee and 
+is available at no cost under the license at http://loinc.org/license. LOINC® is a registered 
+United States trademark of Regenstrief Institute, Inc.
+
+Where the product or service is distributed with a printed license, this notice must appear in
+the printed license. Where the product or service is distributed on a fixed storage medium, a
+text file containing this notice also must be stored on the storage medium in a file called 
+"LOINC_short_license.txt." Where the product or service is distributed via the Internet, this
+notice must be accessible on the same Internet page from which the product is available for
+download. Where the product or service is provided as an online resource (e.g., to be accessed
+programmatically through an application programming interface (API) or through a user interface),
+this notice must be available in the license or terms of use.
