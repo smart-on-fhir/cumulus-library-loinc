@@ -19,7 +19,7 @@ this study, you'll need to provide your user and password as custom options. You
 command should look like this:
 
 ```bash
-cumulus-library build -t loinc -o user:your_username -o password:your_password [any other cli agurments]
+cumulus-library build -t loinc --loinc_user your_username --loinc_password your_password [any other cli agurments]
 ```
 
 You can, if you prefer, create environment variables to hold this data. We'll check for the

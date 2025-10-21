@@ -1,9 +1,6 @@
-import pathlib
 import re
 
 import pandas
-import platformdirs
-import rich
 from cumulus_library import BaseTableBuilder, base_utils, log_utils, study_manifest
 from cumulus_library.apis import loinc
 from cumulus_library.template_sql import base_templates
@@ -38,24 +35,16 @@ class LoincBuilder(BaseTableBuilder):
         self,
         user: str,
         password: str,
-        download_path: pathlib.Path,
         force_upload: bool,
     ):
         api = loinc.LoincApi(user=user, password=password)
         new = False
         version, url = api.get_download_info()
-        if not (download_path / version).exists():
-            new = True
-            console = rich.get_console()
-            console.print(f"Loinc version {version} available, downloading & updating...")
-            api.download_loinc_dataset(version=version, download_url=url, path=download_path)
-        return version, new
+        api.download_loinc_dataset(version=version, download_url=url)
+        return version, new, api
 
     def snake_case(self, x: str) -> str:
-        if x.isupper():
-            # The core loinc table has CAPS_CASE format columns
-            return x.lower()
-        # Other tables have CamelCase format columns
+        """Converts either CAPS_CASE or CamelCase to snake_case"""
         return re.sub(r"([a-z])([A-Z])", r"\1_\2", x).lower()
 
     def prepare_queries(
@@ -65,14 +54,10 @@ class LoincBuilder(BaseTableBuilder):
         *args,
         **kwargs,
     ):
-        base_path = pathlib.Path(platformdirs.user_cache_dir("cumulus-library", "smart-on-fhir"))
-        download_path = base_path / "loinc/downloads"
-        download_path.mkdir(exist_ok=True, parents=True)
-        loinc_version, new_version = self.get_loinc_data(
-            config.loinc_user, config.loinc_password, download_path, config.force_upload
+        loinc_version, new_version, api = self.get_loinc_data(
+            config.loinc_user, config.loinc_password, config.force_upload
         )
-        download_path = download_path / loinc_version
-        parquet_path = base_path / f"loinc/generated_parquet/{loinc_version}"
+        parquet_path = api.cache_dir / f"generated_parquet/{loinc_version}"
 
         with base_utils.get_progress_bar() as progress:
             task = progress.add_task(
@@ -84,7 +69,9 @@ class LoincBuilder(BaseTableBuilder):
                 # The loinc core table has some nulls that break type inference,
                 # and since these tables are relatively small, we'll override the
                 # chunking behavior and read them all in at once.
-                df = pandas.read_csv(download_path / table[1], low_memory=False)
+                df = pandas.read_csv(
+                    api.download_dir / f"{loinc_version}/{table[1]}", low_memory=False
+                )
                 df = df.rename(self.snake_case, axis="columns")
                 file_path = parquet_path / table[1].replace(".csv", ".parquet")
                 file_path.parent.mkdir(exist_ok=True, parents=True)

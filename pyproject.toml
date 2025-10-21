@@ -8,7 +8,7 @@ dependencies = [
 ]
 description = "A LOINC ontology study for the Cumulus project"
 readme = "README.md"
-license = { text="Apache License 2.0" }
+license = "Apache-2.0 AND LicenseRef-Loinc"
 keywords = ["FHIR", "SQL", "Health Informatics"]
 classifiers = [
     "License :: OSI Approved :: Apache Software License",
@@ -19,7 +19,7 @@ classifiers = [
 dynamic=["version"]
 [project.optional-dependencies]
 dev = [
-    "ruff > 0.14, < 0.15",
+    "ruff >= 0.14, < 0.15",
     "pre-commit",
 ]
 test = [

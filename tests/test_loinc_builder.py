@@ -16,7 +16,7 @@ from cumulus_library_loinc import loinc_builder
 )
 @mock.patch("platformdirs.user_cache_dir")
 @responses.activate
-def test_static_tables(mock_dir, tmp_path):
+def test_loinc_tables(mock_dir, tmp_path):
     mock_dir.return_value = tmp_path
     responses.add(
         responses.GET,
