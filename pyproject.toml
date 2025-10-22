@@ -11,7 +11,6 @@ readme = "README.md"
 license = "Apache-2.0 AND LicenseRef-Loinc"
 keywords = ["FHIR", "SQL", "Health Informatics"]
 classifiers = [
-    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Topic :: Software Development :: Libraries :: Python Modules",
@@ -24,7 +23,8 @@ dev = [
 ]
 test = [
     "pytest",
-    "responses"
+    "pytest-cov",
+    "responses",
 ]
 
 [project.urls]

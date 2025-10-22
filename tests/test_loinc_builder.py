@@ -37,7 +37,7 @@ def test_loinc_tables(mock_dir, tmp_path):
             status=200,
             body=f.read(),
             match=[responses.matchers.request_kwargs_matcher({"stream": True})],
-            headers={"Content-Length": "3656"},
+            headers={"Content-Length": "246131"},
         )
 
     db_config.db_type = "duckdb"
