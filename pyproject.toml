@@ -1,0 +1,60 @@
+[project]
+name = "cumulus_library_loinc"
+requires-python = ">= 3.11"
+dependencies = [
+    "cumulus-library >= 5.1, <6.0",
+    "requests >= 2.28",
+    "platformdirs",
+]
+description = "A LOINC ontology study for the Cumulus project"
+readme = "README.md"
+license = "Apache-2.0 AND LicenseRef-Loinc"
+keywords = ["FHIR", "SQL", "Health Informatics"]
+classifiers = [
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dynamic=["version"]
+[project.optional-dependencies]
+dev = [
+    "ruff >= 0.14, < 0.15",
+    "pre-commit",
+]
+test = [
+    "pytest",
+    "pytest-cov",
+    "responses",
+]
+
+[project.urls]
+Home = "https://smarthealthit.org/cumulus"
+Documentation = "https://docs.smarthealthit.org/cumulus/"
+Source = "https://github.com/smart-on-fhir/cumulus-library-loinc"
+
+[build-system]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.sdist]
+include = [".sqlfluff"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "A",  # prevent using keywords that clobber python builtins
+    "B",  # bugbear: security warnings
+    "E",  # pycodestyle
+    "F",  # pyflakes
+    "I",  # isort
+    "ISC",  # implicit string concatenation
+    "PLE",  # pylint errors
+    "RUF",  # the ruff developer's own rules
+    "UP",  # alert you when better syntax is available in your python version
+]
+

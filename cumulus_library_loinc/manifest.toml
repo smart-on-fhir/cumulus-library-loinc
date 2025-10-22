@@ -1,0 +1,10 @@
+study_prefix = "loinc"
+
+[table_builder_config]
+file_names = [
+    "loinc_builder.py"
+]
+
+[advanced_options]
+dedicated_schema="loinc"
+
