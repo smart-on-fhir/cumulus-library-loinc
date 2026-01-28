@@ -1,6 +1,6 @@
 study_prefix = "loinc"
 
-[table_builder_config]
+[file_config]
 file_names = [
     "loinc_builder.py"
 ]
