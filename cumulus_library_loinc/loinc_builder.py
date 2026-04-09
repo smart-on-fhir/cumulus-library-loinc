@@ -73,9 +73,10 @@ class LoincBuilder(BaseTableBuilder):
                     api.download_dir / f"{loinc_version}/{table[1]}", low_memory=False
                 )
                 df = df.rename(self.snake_case, axis="columns")
-                file_path = parquet_path / table[1].replace(".csv", ".parquet")
-                file_path.parent.mkdir(exist_ok=True, parents=True)
-                df.to_parquet(file_path)
+                file_path = parquet_path / table[0]
+                file_path.mkdir(exist_ok=True, parents=True)
+                print(file_path)
+                df.to_parquet(file_path / table[1].split("/")[-1].replace(".csv", ".parquet"))
                 progress.update(task, description=f"Uploading {file_path.name}...")
                 remote_path = config.db.upload_file(
                     file=file_path,
