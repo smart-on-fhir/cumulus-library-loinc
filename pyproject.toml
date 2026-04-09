@@ -2,7 +2,7 @@
 name = "cumulus_library_loinc"
 requires-python = ">= 3.11"
 dependencies = [
-    "cumulus-library >= 5.1, < 7.0",
+    "cumulus-library >= 6, < 7.0",
     "requests >= 2.28",
     "platformdirs",
 ]
