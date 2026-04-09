@@ -1,9 +1,12 @@
 study_prefix = "loinc"
-
-[file_config]
-file_names = [
+description = """This study provides an instance of the LOINC coding system suitable for use
+with other Cumulus studies."""
+[[stages.default]]
+label = "extracting LOINC data"
+files = [
     "loinc_builder.py"
 ]
+type = "build:parallel"
 
 [advanced_options]
 dedicated_schema="loinc"
