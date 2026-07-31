@@ -75,11 +75,11 @@ class LoincBuilder(BaseTableBuilder):
                 df = df.rename(self.snake_case, axis="columns")
                 file_path = parquet_path / table[0]
                 file_path.mkdir(exist_ok=True, parents=True)
-                print(file_path)
-                df.to_parquet(file_path / table[1].split("/")[-1].replace(".csv", ".parquet"))
+                parquet_name = table[1].split("/")[-1].replace(".csv", ".parquet")
+                df.to_parquet(file_path / parquet_name)
                 progress.update(task, description=f"Uploading {file_path.name}...")
                 remote_path = config.db.upload_file(
-                    file=file_path,
+                    file=file_path / parquet_name,
                     study=manifest.get_study_prefix(),
                     topic=file_path.stem,
                     force_upload=config.force_upload or new_version or True,

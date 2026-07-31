@@ -227,3 +227,49 @@ def test_loinc_tables(mock_dir, tmp_path):
         assert len(res) == table_conf["size"]
         assert res[0] == table_conf["first"]
         assert res[-1] == table_conf["last"]
+
+
+@mock.patch.dict(
+    os.environ,
+    clear=True,
+)
+@mock.patch("cumulus_library.databases.AthenaDatabaseBackend")
+@mock.patch("platformdirs.user_cache_dir")
+@responses.activate
+def test_athena_config(mock_dir, mock_athena, tmp_path):
+    mock_dir.return_value = tmp_path
+    responses.add(
+        responses.GET,
+        f"{loinc.BASE_URL}Loinc",
+        match=[responses.matchers.query_param_matcher({})],
+        body=json.dumps(
+            {
+                "version": "test",
+                "downloadUrl": "http://download_url",
+            }
+        ),
+        status=200,
+    )
+    with open("./tests/test_data/loinc.zip", "rb") as f:
+        responses.add(
+            responses.GET,
+            "http://download_url",
+            status=200,
+            body=f.read(),
+            match=[responses.matchers.request_kwargs_matcher({"stream": True})],
+            headers={"Content-Length": "246131"},
+        )
+
+    db_config.db_type = "athena"
+    config = base_utils.StudyConfig(
+        db=mock_athena,
+        loinc_user="user",
+        loinc_password="password",
+        schema="loinc",
+    )
+    cursor = config.db.cursor("food")
+    cursor.execute("CREATE SCHEMA loinc")
+    manifest = study_manifest.StudyManifest(study_path="./cumulus_library_loinc/")
+    builder = loinc_builder.LoincBuilder()
+    builder.prepare_queries(config=config, manifest=manifest)
+    assert mock_athena.upload_file.call_args[1]["file"].name == "MapTo.parquet"
